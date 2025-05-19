@@ -7,7 +7,7 @@ class PipeServer
     {
         Process pipeClient = new Process();
 
-        pipeClient.StartInfo.FileName = "pipeClient.exe";
+        pipeClient.StartInfo.FileName = "BannanagramsClient.exe";
 
         using (AnonymousPipeServerStream pipeServer =
             new AnonymousPipeServerStream(PipeDirection.Out,
