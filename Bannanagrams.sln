@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BannanagramsServer", "Banna
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BannanagramsClient", "BannanagramsClient\BannanagramsClient.csproj", "{EFF77D7D-F5FE-4EB6-8AD0-E3770E91B712}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BannanagramsLibrary", "BannanagramsLibrary\BannanagramsLibrary.csproj", "{13CC9254-882E-4D8D-9923-160253F68702}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{EFF77D7D-F5FE-4EB6-8AD0-E3770E91B712}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFF77D7D-F5FE-4EB6-8AD0-E3770E91B712}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFF77D7D-F5FE-4EB6-8AD0-E3770E91B712}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13CC9254-882E-4D8D-9923-160253F68702}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13CC9254-882E-4D8D-9923-160253F68702}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13CC9254-882E-4D8D-9923-160253F68702}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13CC9254-882E-4D8D-9923-160253F68702}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

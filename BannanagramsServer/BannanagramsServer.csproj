@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BannanagramsClient\BannanagramsClient.csproj" />
+    <ProjectReference Include="..\BannanagramsLibrary\BannanagramsLibrary.csproj" />
   </ItemGroup>
 
 </Project>

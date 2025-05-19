@@ -1,52 +1,33 @@
 ﻿using System.IO.Pipes;
 using System.Diagnostics;
+using BannanagramsLibrary;
 
 class PipeServer
 {
-    static void Main()
+    static async Task Main()
     {
-        Process pipeClient = new Process();
+        var pipeOut = new AnonymousPipeServerStream(PipeDirection.Out, HandleInheritability.Inheritable);
+        var pipeIn = new AnonymousPipeServerStream(PipeDirection.In, HandleInheritability.Inheritable);
 
-        pipeClient.StartInfo.FileName = "BannanagramsClient.exe";
-
-        using (AnonymousPipeServerStream pipeServer =
-            new AnonymousPipeServerStream(PipeDirection.Out,
-            HandleInheritability.Inheritable))
+        var psi = new ProcessStartInfo
         {
-            Console.WriteLine($"[SERVER] Current TransmissionMode: {pipeServer.TransmissionMode}.");
+            FileName = "BannanagramsClient.exe",
+            Arguments = $"{pipeOut.GetClientHandleAsString()} {pipeIn.GetClientHandleAsString()}",
+            UseShellExecute = false
+        };
 
-            // Pass the client process a handle to the server.
-            pipeClient.StartInfo.Arguments =
-                pipeServer.GetClientHandleAsString();
-            pipeClient.StartInfo.UseShellExecute = false;
-            pipeClient.Start();
+        Process client = Process.Start(psi)!;
+        pipeOut.DisposeLocalCopyOfClientHandle();
+        pipeIn.DisposeLocalCopyOfClientHandle();
 
-            pipeServer.DisposeLocalCopyOfClientHandle();
+        var messenger = new PipeMessenger(pipeIn, pipeOut);
+        var handler = new ServerMessageHandler(messenger);
 
-            try
-            {
-                // Read user input and send that to the client process.
-                using (StreamWriter sw = new StreamWriter(pipeServer))
-                {
-                    sw.AutoFlush = true;
-                    // Send a 'sync message' and wait for client to receive it.
-                    sw.WriteLine("SYNC");
-                    pipeServer.WaitForPipeDrain();
-                    // Send the console input to the client process.
-                    Console.Write("[SERVER] Enter text: ");
-                    sw.WriteLine(Console.ReadLine());
-                }
-            }
-            // Catch the IOException that is raised if the pipe is broken
-            // or disconnected.
-            catch (IOException e)
-            {
-                Console.WriteLine($"[SERVER] Error: {e.Message}");
-            }
-        }
+        await handler.SendSplitAsync(new List<char> { 'A', 'B', 'C' });
+        await handler.SendPeelAsync('D');
+        await handler.SendDumpAsync(new List<char> { 'E', 'F', 'G' });
+        await handler.SendBannanasAsync();
 
-        pipeClient.WaitForExit();
-        pipeClient.Close();
-        Console.WriteLine("[SERVER] Client quit. Server terminating.");
+        await handler.HandleClientMessagesAsync();
     }
 }
