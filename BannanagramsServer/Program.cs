@@ -10,10 +10,13 @@ class Program
 
     static async Task Main()
     {
-        List<string> exeFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.exe").Where(f => Path.GetFileName(f) != "BannanagramsServer.exe").ToList();
+
+        List<string> clientFiles = Directory.GetFiles(Directory.GetCurrentDirectory())
+         .Where(f => (f.EndsWith(".exe") && Path.GetFileName(f) != "BannanagramsServer.exe") || f.EndsWith(".py"))
+         .ToList();
 
         Console.WriteLine("Found the following client executables:");
-        exeFiles.ForEach(Console.WriteLine);
+        clientFiles.ForEach(Console.WriteLine);
 
         Console.Write("Are these correct? (yes/no): ");
         if (Console.ReadLine()?.Trim().ToLower() != "yes")
@@ -57,7 +60,7 @@ class Program
         List<(ServerMessageSender Sender, ClientMessageReceiver Receiver, string Id)> clients = new List<(ServerMessageSender Sender, ClientMessageReceiver Receiver, string Id)>();
 
 
-        foreach (string exe in exeFiles)
+        foreach (string clientFile in clientFiles)
         {
             string pipeNameIn = $"pipe_in_{Guid.NewGuid()}";
             string pipeNameOut = $"pipe_out_{Guid.NewGuid()}";
@@ -65,10 +68,13 @@ class Program
             var pipeOut = new NamedPipeServerStream(pipeNameOut, PipeDirection.Out, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
             var pipeIn = new NamedPipeServerStream(pipeNameIn, PipeDirection.In, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
 
+            string fileName = Path.GetFileName(clientFile);
+            bool isPython = fileName.EndsWith(".py");
+
             ProcessStartInfo psi = new ProcessStartInfo
             {
-                FileName = exe,
-                Arguments = $"{pipeNameOut} {pipeNameIn}",
+                FileName = isPython ? "python" : clientFile,
+                Arguments = isPython ? $"\"{clientFile}\" {pipeNameOut} {pipeNameIn}" : $"{pipeNameOut} {pipeNameIn}",
                 UseShellExecute = false
             };
 
@@ -80,9 +86,9 @@ class Program
             PipeSender pipeSender = new PipeSender(pipeOut);
             PipeReceiver pipeReceiver = new PipeReceiver(pipeIn);
             ServerMessageSender sender = new ServerMessageSender(pipeSender);
-            ClientMessageReceiver receiver = new MyClientMessageReceiver(messageQueue, pipeReceiver, Path.GetFileName(exe));
+            ClientMessageReceiver receiver = new MyClientMessageReceiver(messageQueue, pipeReceiver, Path.GetFileName(clientFile));
 
-            clients.Add((sender, receiver, Path.GetFileName(exe)));
+            clients.Add((sender, receiver, Path.GetFileName(clientFile)));
 
             List<char> letters = letterBag.Take(21).ToList();
             letterBag.RemoveRange(0, 21);

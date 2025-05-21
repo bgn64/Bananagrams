@@ -8,8 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BananagramsTestClient\BananagramsTestClient.csproj" />
     <ProjectReference Include="..\BannanagramsLibrary\BannanagramsLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TestClient.py">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
