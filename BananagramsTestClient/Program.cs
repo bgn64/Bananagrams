@@ -6,11 +6,17 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        using AnonymousPipeClientStream pipeIn = new AnonymousPipeClientStream(PipeDirection.In, args[0]);
-        using AnonymousPipeClientStream pipeOut = new AnonymousPipeClientStream(PipeDirection.Out, args[1]);
+        string pipeNameOut = args[0];
+        string pipeNameIn = args[1];
 
-        PipeSender pipeSender = new PipeSender(pipeOut);
+        var pipeIn = new NamedPipeClientStream(".", pipeNameOut, PipeDirection.In);
+        var pipeOut = new NamedPipeClientStream(".", pipeNameIn, PipeDirection.Out);
+
+        await pipeIn.ConnectAsync();
+        await pipeOut.ConnectAsync();
+
         PipeReceiver pipeReceiver = new PipeReceiver(pipeIn);
+        PipeSender pipeSender = new PipeSender(pipeOut);
 
         ClientMessageSender sender = new ClientMessageSender(pipeSender);
         ServerMessageReceiver receiver = new MyServerMessageReceiver(pipeReceiver);

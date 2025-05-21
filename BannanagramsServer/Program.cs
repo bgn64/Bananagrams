@@ -56,27 +56,32 @@ class Program
 
         List<(ServerMessageSender Sender, ClientMessageReceiver Receiver, string Id)> clients = new List<(ServerMessageSender Sender, ClientMessageReceiver Receiver, string Id)>();
 
+
         foreach (string exe in exeFiles)
         {
-            AnonymousPipeServerStream pipeOut = new AnonymousPipeServerStream(PipeDirection.Out, HandleInheritability.Inheritable);
-            AnonymousPipeServerStream pipeIn = new AnonymousPipeServerStream(PipeDirection.In, HandleInheritability.Inheritable);
+            string pipeNameIn = $"pipe_in_{Guid.NewGuid()}";
+            string pipeNameOut = $"pipe_out_{Guid.NewGuid()}";
+
+            var pipeOut = new NamedPipeServerStream(pipeNameOut, PipeDirection.Out, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
+            var pipeIn = new NamedPipeServerStream(pipeNameIn, PipeDirection.In, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
 
             ProcessStartInfo psi = new ProcessStartInfo
             {
                 FileName = exe,
-                Arguments = $"{pipeOut.GetClientHandleAsString()} {pipeIn.GetClientHandleAsString()}",
+                Arguments = $"{pipeNameOut} {pipeNameIn}",
                 UseShellExecute = false
             };
 
             Process process = Process.Start(psi)!;
-            pipeOut.DisposeLocalCopyOfClientHandle();
-            pipeIn.DisposeLocalCopyOfClientHandle();
+
+            await pipeOut.WaitForConnectionAsync();
+            await pipeIn.WaitForConnectionAsync();
 
             PipeSender pipeSender = new PipeSender(pipeOut);
             PipeReceiver pipeReceiver = new PipeReceiver(pipeIn);
             ServerMessageSender sender = new ServerMessageSender(pipeSender);
             ClientMessageReceiver receiver = new MyClientMessageReceiver(messageQueue, pipeReceiver, Path.GetFileName(exe));
-            
+
             clients.Add((sender, receiver, Path.GetFileName(exe)));
 
             List<char> letters = letterBag.Take(21).ToList();
