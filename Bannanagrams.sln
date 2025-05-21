@@ -1,13 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.36105.23 d17.13
+VisualStudioVersion = 17.13.36105.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BannanagramsServer", "BannanagramsServer\BannanagramsServer.csproj", "{D2CCC183-BB8D-4592-9BE5-A39CD7E4E0C2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BannanagramsClient", "BannanagramsClient\BannanagramsClient.csproj", "{EFF77D7D-F5FE-4EB6-8AD0-E3770E91B712}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BannanagramsLibrary", "BannanagramsLibrary\BannanagramsLibrary.csproj", "{13CC9254-882E-4D8D-9923-160253F68702}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BananagramsTestClient", "BananagramsTestClient\BananagramsTestClient.csproj", "{724290C7-E2A4-4B72-951B-BA61615ECC84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BananagramsTest", "BananagramsTest\BananagramsTest.csproj", "{6FAA59A9-8FA7-474D-BD01-9920870E9412}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{13CC9254-882E-4D8D-9923-160253F68702}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13CC9254-882E-4D8D-9923-160253F68702}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13CC9254-882E-4D8D-9923-160253F68702}.Release|Any CPU.Build.0 = Release|Any CPU
+		{724290C7-E2A4-4B72-951B-BA61615ECC84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{724290C7-E2A4-4B72-951B-BA61615ECC84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{724290C7-E2A4-4B72-951B-BA61615ECC84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{724290C7-E2A4-4B72-951B-BA61615ECC84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FAA59A9-8FA7-474D-BD01-9920870E9412}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FAA59A9-8FA7-474D-BD01-9920870E9412}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FAA59A9-8FA7-474D-BD01-9920870E9412}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FAA59A9-8FA7-474D-BD01-9920870E9412}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

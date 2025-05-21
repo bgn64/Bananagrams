@@ -1,19 +1,20 @@
-﻿using BannanagramsLibrary;
+﻿using BannanagramsClient;
+using BannanagramsLibrary;
 using System.IO.Pipes;
 
 class Program
 {
     static async Task Main(string[] args)
     {
-        using var pipeIn = new AnonymousPipeClientStream(PipeDirection.In, args[0]);
-        using var pipeOut = new AnonymousPipeClientStream(PipeDirection.Out, args[1]);
+        using AnonymousPipeClientStream pipeIn = new AnonymousPipeClientStream(PipeDirection.In, args[0]);
+        using AnonymousPipeClientStream pipeOut = new AnonymousPipeClientStream(PipeDirection.Out, args[1]);
 
-        var messenger = new PipeMessenger(pipeIn, pipeOut);
-        var handler = new ClientMessageHandler(messenger);
+        PipeSender pipeSender = new PipeSender(pipeOut);
+        PipeReceiver pipeReceiver = new PipeReceiver(pipeIn);
 
-        await handler.SendDumpAsync('Z');
-        await handler.SendPeelAsync([['A', 'B'], ['C', 'D']]);
+        ClientMessageSender sender = new ClientMessageSender(pipeSender);
+        ServerMessageReceiver receiver = new MyServerMessageReceiver(pipeReceiver);
 
-        await handler.HandleServerMessagesAsync();
+        await receiver.ListenAsync();
     }
 }

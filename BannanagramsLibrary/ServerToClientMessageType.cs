@@ -2,6 +2,6 @@
 {
     public enum ServerToClientMessageType
     {
-        SPLIT, PEEL, DUMP, BANNANAS
+        SPLIT, PEEL, DUMP, BANANAS
     }
 }
