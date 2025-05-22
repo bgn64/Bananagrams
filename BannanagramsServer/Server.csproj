@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BananagramsTestClient\BananagramsTestClient.csproj" />
-    <ProjectReference Include="..\BannanagramsLibrary\BannanagramsLibrary.csproj" />
+    <ProjectReference Include="..\BananagramsTestClient\TestClient.csproj" />
+    <ProjectReference Include="..\BannanagramsLibrary\Library.csproj" />
   </ItemGroup>
 
   <ItemGroup>

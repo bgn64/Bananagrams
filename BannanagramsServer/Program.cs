@@ -41,7 +41,7 @@ class Program
     static async Task Main()
     {
         List<string> clientFiles = Directory.GetFiles(Directory.GetCurrentDirectory())
-         .Where(f => (f.EndsWith(".exe") && Path.GetFileName(f) != "BannanagramsServer.exe") || f.EndsWith(".py"))
+         .Where(f => (f.EndsWith(".exe") && Path.GetFileName(f) != "Server.exe") || f.EndsWith(".py"))
          .ToList();
 
         if (clientFiles.Count == 0)

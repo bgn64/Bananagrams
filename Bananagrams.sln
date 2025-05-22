@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.36105.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BannanagramsServer", "BannanagramsServer\BannanagramsServer.csproj", "{D2CCC183-BB8D-4592-9BE5-A39CD7E4E0C2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "BannanagramsServer\Server.csproj", "{D2CCC183-BB8D-4592-9BE5-A39CD7E4E0C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BannanagramsClient", "BannanagramsClient\BannanagramsClient.csproj", "{EFF77D7D-F5FE-4EB6-8AD0-E3770E91B712}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyClient", "BannanagramsClient\MyClient.csproj", "{EFF77D7D-F5FE-4EB6-8AD0-E3770E91B712}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BannanagramsLibrary", "BannanagramsLibrary\BannanagramsLibrary.csproj", "{13CC9254-882E-4D8D-9923-160253F68702}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library", "BannanagramsLibrary\Library.csproj", "{13CC9254-882E-4D8D-9923-160253F68702}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BananagramsTestClient", "BananagramsTestClient\BananagramsTestClient.csproj", "{724290C7-E2A4-4B72-951B-BA61615ECC84}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClient", "BananagramsTestClient\TestClient.csproj", "{724290C7-E2A4-4B72-951B-BA61615ECC84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BananagramsTest", "BananagramsTest\BananagramsTest.csproj", "{6FAA59A9-8FA7-474D-BD01-9920870E9412}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "BananagramsTest\Tests.csproj", "{6FAA59A9-8FA7-474D-BD01-9920870E9412}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
