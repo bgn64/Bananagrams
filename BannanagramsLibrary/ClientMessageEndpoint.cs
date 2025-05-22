@@ -2,20 +2,27 @@
 
 namespace BannanagramsLibrary
 {
-    public abstract class ServerMessageReceiver
+    public abstract class ClientMessageEndpoint
     {
-        private readonly PipeReceiver receiver;
-
-        protected ServerMessageReceiver(PipeReceiver receiver)
+        private readonly PipeMessageChannel channel;
+        protected ClientMessageEndpoint(PipeMessageChannel channel)
         {
-            this.receiver = receiver;
+            this.channel = channel;
         }
 
+        // Outgoing messages (Client → Server)
+        public Task SendDumpAsync(char letter) =>
+            channel.SendAsync(new ClientToServerMessage { Type = ClientToServerMessageType.DUMP, Payload = letter });
+
+        public Task SendPeelAsync(char[][] board) =>
+            channel.SendAsync(new ClientToServerMessage { Type = ClientToServerMessageType.PEEL, Payload = board });
+
+        // Incoming messages (Server → Client)
         public async Task ListenAsync()
         {
             while (true)
             {
-                ServerToClientMessage? message = await receiver.ReceiveAsync<ServerToClientMessage>();
+                var message = await channel.ReceiveAsync<ServerToClientMessage>();
                 if (message == null) break;
 
                 CastServerPayload(message);
@@ -35,16 +42,15 @@ namespace BannanagramsLibrary
                         await OnBananasAsync(message);
                         return;
                     default:
-                        Console.WriteLine($"Unknown message type {message.Type}.");
+                        Console.WriteLine($"Unknown server message type {message.Type}.");
                         break;
                 }
             }
         }
 
-        private void CastServerPayload(ServerToClientMessage message)
+        private static void CastServerPayload(ServerToClientMessage message)
         {
             var payloadJson = JsonSerializer.Serialize(message.Payload);
-
             switch (message.Type)
             {
                 case ServerToClientMessageType.SPLIT:

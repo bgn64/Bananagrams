@@ -3,12 +3,12 @@ using System.Threading.Channels;
 
 namespace BannanagramsServer
 {
-    internal class MyClientMessageReceiver : ClientMessageReceiver
+    internal class MyServerMessageEndpoint : ServerMessageEndpoint
     {
         private Channel<QueuedClientMessage> messageQueue;
         private string clientId;
 
-        public MyClientMessageReceiver(Channel<QueuedClientMessage> messageQueue, PipeReceiver receiver, string clientId) : base(receiver)
+        public MyServerMessageEndpoint(Channel<QueuedClientMessage> messageQueue, PipeMessageChannel channel, string clientId) : base(channel)
         {
             this.messageQueue = messageQueue;
             this.clientId = clientId;

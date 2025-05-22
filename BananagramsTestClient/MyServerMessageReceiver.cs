@@ -2,30 +2,38 @@
 
 namespace BannanagramsTestClient
 {
-    internal class MyServerMessageReceiver : ServerMessageReceiver
+    internal class MyClientMessageEndpoint : ClientMessageEndpoint
     {
-        public MyServerMessageReceiver(PipeReceiver receiver) : base(receiver)
+        public MyClientMessageEndpoint(PipeMessageChannel channel) : base(channel)
         {
         }
 
-        protected override async Task OnBananasAsync(ServerToClientMessage message)
+        protected override Task OnBananasAsync(ServerToClientMessage message)
         {
             Console.WriteLine("Received BANNANAS");
+
+            return Task.CompletedTask;
         }
 
-        protected override async Task OnDumpAsync(ServerToClientMessage message)
+        protected override Task OnDumpAsync(ServerToClientMessage message)
         {
-            Console.WriteLine($"Received DUMP: {string.Join(", ", message.Payload!.ToString())}");
+            Console.WriteLine($"Received DUMP: {string.Join(", ", (List<char>)message.Payload!)}");
+
+            return Task.CompletedTask;
         }
 
-        protected override async Task OnPeelAsync(ServerToClientMessage message)
+        protected override Task OnPeelAsync(ServerToClientMessage message)
         {
             Console.WriteLine($"Received PEEL: {message.Payload}");
+
+            return Task.CompletedTask;
         }
 
-        protected override async Task OnSplitAsync(ServerToClientMessage message)
+        protected override Task OnSplitAsync(ServerToClientMessage message)
         {
-            Console.WriteLine($"Received SPLIT: {string.Join(", ", message.Payload!.ToString())}");
+            Console.WriteLine($"Received SPLIT: {string.Join(", ", (List<char>)message.Payload!)}");
+
+            return Task.CompletedTask;
         }
     }
 }

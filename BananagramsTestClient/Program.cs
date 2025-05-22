@@ -9,26 +9,30 @@ class Program
         string pipeNameOut = args[0];
         string pipeNameIn = args[1];
 
+        var endpoint = await CreateClientEndpointAsync(pipeNameOut, pipeNameIn);
+
+        Task listenTask = endpoint.ListenAsync();
+        Task inputTask = HandleUserInputAsync(endpoint);
+
+        await Task.WhenAny(listenTask, inputTask);
+    }
+
+
+    private static async Task<ClientMessageEndpoint> CreateClientEndpointAsync(string pipeNameOut, string pipeNameIn)
+    {
         var pipeIn = new NamedPipeClientStream(".", pipeNameOut, PipeDirection.In);
         var pipeOut = new NamedPipeClientStream(".", pipeNameIn, PipeDirection.Out);
 
         await pipeIn.ConnectAsync();
         await pipeOut.ConnectAsync();
 
-        PipeReceiver pipeReceiver = new PipeReceiver(pipeIn);
-        PipeSender pipeSender = new PipeSender(pipeOut);
+        var channel = new PipeMessageChannel(pipeIn, pipeOut);
 
-        ClientMessageSender sender = new ClientMessageSender(pipeSender);
-        ServerMessageReceiver receiver = new MyServerMessageReceiver(pipeReceiver);
-
-        // Run receiver and input loop concurrently
-        Task receiverTask = receiver.ListenAsync();
-        Task inputTask = HandleUserInputAsync(sender);
-
-        await Task.WhenAny(receiverTask, inputTask);
+        return new MyClientMessageEndpoint(channel);
     }
 
-    private static async Task HandleUserInputAsync(ClientMessageSender sender)
+
+    private static async Task HandleUserInputAsync(ClientMessageEndpoint endpoint)
     {
         Console.WriteLine("Enter commands (e.g., DUMP A or PEEL):");
 
@@ -50,12 +54,12 @@ class Program
                             Console.WriteLine("Usage: DUMP <letter>");
                             break;
                         }
-                        await sender.SendDumpAsync(parts[1][0]);
+                        await endpoint.SendDumpAsync(parts[1][0]);
                         break;
 
                     case "PEEL":
                         // For simplicity, send an empty board
-                        await sender.SendPeelAsync(new char[0][]);
+                        await endpoint.SendPeelAsync(new char[0][]);
                         break;
 
                     case "EXIT":

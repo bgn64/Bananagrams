@@ -2,20 +2,34 @@
 
 namespace BannanagramsLibrary
 {
-    public abstract class ClientMessageReceiver
+    public abstract class ServerMessageEndpoint
     {
-        private readonly PipeReceiver receiver;
+        private readonly PipeMessageChannel channel;
 
-        protected ClientMessageReceiver(PipeReceiver receiver)
+        protected ServerMessageEndpoint(PipeMessageChannel channel)
         {
-            this.receiver = receiver;
+            this.channel = channel;
         }
 
-        public async Task ListenAsync()
+        // Outgoing messages (Server → Client)
+        public Task SendSplitAsync(List<char> letters) =>
+ channel.SendAsync(new ServerToClientMessage { Type = ServerToClientMessageType.SPLIT, Payload = letters });
+
+        public Task SendPeelAsync(char letter) =>
+        channel.SendAsync(new ServerToClientMessage { Type = ServerToClientMessageType.PEEL, Payload = letter });
+
+        public Task SendDumpAsync(List<char> letters) =>
+        channel.SendAsync(new ServerToClientMessage { Type = ServerToClientMessageType.DUMP, Payload = letters });
+
+        public Task SendBananasAsync() =>
+        channel.SendAsync(new ServerToClientMessage { Type = ServerToClientMessageType.BANANAS });
+
+        // Incoming messages (Client → Server)
+        public async Task ListenAsync()
         {
             while (true)
             {
-                ClientToServerMessage? message = await receiver.ReceiveAsync<ClientToServerMessage>();
+                var message = await channel.ReceiveAsync<ClientToServerMessage>();
                 if (message == null) break;
 
                 CastClientPayload(message);
@@ -29,16 +43,15 @@ namespace BannanagramsLibrary
                         await OnDumpAsync(message);
                         break;
                     default:
-                        Console.WriteLine($"Unknown message type {message.Type}.");
+                        Console.WriteLine($"Unknown client message type {message.Type}.");
                         break;
                 }
             }
         }
 
-        public static void CastClientPayload(ClientToServerMessage message)
+        private static void CastClientPayload(ClientToServerMessage message)
         {
             var payloadJson = JsonSerializer.Serialize(message.Payload);
-
             switch (message.Type)
             {
                 case ClientToServerMessageType.PEEL:
